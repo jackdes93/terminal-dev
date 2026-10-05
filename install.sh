@@ -41,7 +41,11 @@ BREW_PACKAGES=(
   curl
   wget
   jq
+  eza
+  asdf
+  pyenv
   reattach-to-user-namespace
+  zsh-autosuggestions
 )
 
 info "Installing brew packages..."
@@ -75,6 +79,12 @@ link() {
 
 info "Creating symlinks..."
 
+# Zsh
+link "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
+link "$DOTFILES_DIR/zsh/.zshenv" "$HOME/.zshenv"
+link "$DOTFILES_DIR/zsh/.zprofile" "$HOME/.zprofile"
+link "$DOTFILES_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
+
 # Neovim
 link "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
@@ -85,7 +95,27 @@ link "$DOTFILES_DIR/tmux" "$HOME/.config/tmux"
 link "$DOTFILES_DIR/tmux/.tmux.conf" "$HOME/.tmux.conf"
 
 # ---------------------------------------------------------------------------
-# 4. Neovim plugins (Lazy.nvim bootstrap)
+# 4. Oh My Zsh + Powerlevel10k
+# ---------------------------------------------------------------------------
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  info "Installing Oh My Zsh..."
+  RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  ok "Oh My Zsh installed"
+else
+  ok "Oh My Zsh already installed"
+fi
+
+P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+if [[ ! -d "$P10K_DIR" ]]; then
+  info "Installing Powerlevel10k..."
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_DIR"
+  ok "Powerlevel10k installed"
+else
+  ok "Powerlevel10k already installed"
+fi
+
+# ---------------------------------------------------------------------------
+# 5. Neovim plugins (Lazy.nvim bootstrap)
 # ---------------------------------------------------------------------------
 info "Bootstrapping Neovim plugins (lazy.nvim)..."
 if command -v nvim &>/dev/null; then
@@ -96,7 +126,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. tmux plugin manager (tpm) — optional
+# 6. tmux plugin manager (tpm) — optional
 # ---------------------------------------------------------------------------
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [[ ! -d "$TPM_DIR" ]]; then
