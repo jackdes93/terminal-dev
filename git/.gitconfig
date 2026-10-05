@@ -1,0 +1,6 @@
+[user]
+	name = BINHDP
+	email = binh.dai93@gmail.com
+[core]
+	excludesfile = ~/.gitignore_global
+	fileMode = false

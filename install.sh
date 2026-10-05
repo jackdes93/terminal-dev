@@ -85,6 +85,11 @@ link "$DOTFILES_DIR/zsh/.zshenv" "$HOME/.zshenv"
 link "$DOTFILES_DIR/zsh/.zprofile" "$HOME/.zprofile"
 link "$DOTFILES_DIR/zsh/.p10k.zsh" "$HOME/.p10k.zsh"
 
+# Git
+link "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
+link "$DOTFILES_DIR/git/.gitignore_global" "$HOME/.gitignore_global"
+link "$DOTFILES_DIR/git/ignore" "$HOME/.config/git/ignore"
+
 # Neovim
 link "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
