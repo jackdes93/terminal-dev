@@ -113,51 +113,58 @@ source $ZSH/oh-my-zsh.sh
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 export PATH="/usr/local/bin:$PATH"
-export HOMEBREW="/opt/homebrew/bin"
-export PATH=$PATH:$HOMEBREW
-export PATH=$PATH:$HOME/Documents/flutter/bin
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-
-
-alias vim="nvim"
-alias vi="nvim"
-alias python="python3"
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-alias tmux="TERM=xterm-256color tmux"
-export LC_ALL=en_US.UTF-8
-
-# Added by Antigravity
-export PATH="/Users/jackdes/.antigravity/antigravity/bin:$PATH"
-
-. $(brew --prefix asdf)/libexec/asdf.sh
 export PATH="$HOME/.local/bin:$PATH"
-export ANTHROPIC_MODEL="claude-opus-4-6"
+export PATH="$HOME/bin:$PATH"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/jackdes/.lmstudio/bin"
-# End of LM Studio CLI section
+# OS-specific config
+case "$(uname -s)" in
+  Darwin)
+    export HOMEBREW="/opt/homebrew/bin"
+    export PATH="$PATH:$HOMEBREW"
+    export PATH="$PATH:$HOME/Documents/flutter/bin"
+    export PATH="/opt/homebrew/opt/e2fsprogs/bin:$PATH"
+    export PATH="/opt/homebrew/opt/e2fsprogs/sbin:$PATH"
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    . $(brew --prefix asdf)/libexec/asdf.sh
+    alias tmux="TERM=xterm-256color tmux"
+    export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+    export PATH="$PATH:$HOME/.lmstudio/bin"
+    export PNPM_HOME="$HOME/Library/pnpm"
+    ;;
+  Linux)
+    [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+      source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    [[ -f "$HOME/.asdf/asdf.sh" ]] && . "$HOME/.asdf/asdf.sh"
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+    ;;
+esac
 
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d "$PYENV_ROOT/bin" ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+command -v pyenv &>/dev/null && eval "$(pyenv init --path)" && eval "$(pyenv init -)"
 
 # pnpm
-export PNPM_HOME="/Users/jackdes/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
-# pnpm end
 
-export PATH="$HOME/bin:$PATH"
+# Aliases
+alias vim="nvim"
+alias vi="nvim"
+alias python="python3"
 alias cleandisk="$HOME/bin/cleanup-disk.sh"
 
 # eza (modern ls with colors)
-alias ls="eza --color=always --icons"
-alias ll="eza -l --color=always --icons"
-alias la="eza -la --color=always --icons"
-export PATH=/opt/homebrew/opt/e2fsprogs/bin:$PATH
-export PATH=/opt/homebrew/opt/e2fsprogs/sbin:$PATH
+if command -v eza &>/dev/null; then
+  alias ls="eza --color=always --icons"
+  alias ll="eza -l --color=always --icons"
+  alias la="eza -la --color=always --icons"
+fi
+
+export LC_ALL=en_US.UTF-8
+export ANTHROPIC_MODEL="claude-opus-4-6"
 
 # Claude Code: tài khoản work dùng config dir riêng (ctxbar tách usage theo dir)
 alias claude-work='CLAUDE_CONFIG_DIR=~/.claude-work claude'

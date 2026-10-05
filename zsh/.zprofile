@@ -1,5 +1,9 @@
-# The following lines were added by Docker Desktop to add commands to your PATH.
-export PATH="$PATH:/Users/jackdes/.docker/bin"
-# End of Docker Desktop section.
+# Docker
+[[ -d "$HOME/.docker/bin" ]] && export PATH="$PATH:$HOME/.docker/bin"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)" 2>/dev/null
+elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
